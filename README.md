@@ -1,9 +1,17 @@
-# OBSERV
+<p align="center">
+  <img src="logo.webp" alt="OBSERV Logo" width=125>
+</p>
 
-This project is currently held together with ducktape, LLMs, and dreams.
+<h1 align="center">ⵙBSERV</h1>
 
-Do not use this for anything serious.
+<blockquote>
+  <p align="center">Control OBS' Websocket Server.</p>
+</blockquote>
 
-I'm both amazed and horrified how far I was able to get via  something in the ballpark of 'vibe programming'
 
-Thar be dragons, and macros I def don't understand rn (if ever) lol
+> [!NOTE]  
+> This project is currently held together with ducktape, LLMs, and dreams.
+>> Do not use this for anything important / serious!
+
+
+`I'm both amazed and horrified how far I was able to get via something in the ballpark of 'vibe programming'; Thar be dragons, and macros I def don't understand rn (if ever) lol`
