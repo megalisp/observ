@@ -15,9 +15,9 @@
 ;;
 ;; How it works:
 ;; - All command functions are generated from the official OBS WebSocket protocol definition JSON.
-;; - The protocol file is expected at misc/obs-websocket-protocol.json (or will be downloaded automatically
+;; - The protocol file is expected at seed/obs-websocket-protocol.json (or will be downloaded automatically
 ;;   from: https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.json)
-;; - If the protocol file is missing, it will be downloaded to the misc/ directory.
+;; - If the protocol file is missing, it will be downloaded to the seed/ directory.
 ;; - If an auto.rkt already exists, it will be renamed to auto.rkt-old as a backup.
 ;; - The script then runs reqs.rkt to generate a new auto.rkt based on the protocol JSON.
 ;;
@@ -29,7 +29,7 @@
 ;; This ensures your OBS command bindings are always up-to-date with the latest protocol.
 
 (define protocol-url "https://raw.githubusercontent.com/obsproject/obs-websocket/master/docs/generated/protocol.json")
-(define protocol-path (build-path "misc" "obs-websocket-protocol.json"))
+(define protocol-path (build-path "seed" "obs-websocket-protocol.json"))
 (define auto-path (build-path "auto.rkt"))
 (define auto-old-path (build-path "auto.rkt-old"))
 
@@ -37,7 +37,7 @@
 (define (ensure-protocol-json)
   (unless (file-exists? protocol-path)
     (printf "Downloading protocol.json from ~a...\n" protocol-url)
-    (make-directory* "misc")
+    (make-directory* "seed")
     (call/input-url (string->url protocol-url)
                     get-pure-port
                     (lambda (in)

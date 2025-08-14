@@ -41,7 +41,7 @@
 ;; --- OBS Request Function Generator ---
 ;; Load the full OBS protocol JSON and extract the requests array
 (define obs-requests
-  (let* ([proto (call-with-input-file "misc/obs-websocket-protocol.json" read-json)]
+  (let* ([proto (call-with-input-file "seed/obs-websocket-protocol.json" read-json)]
          [requests (hash-ref proto 'requests)])
     requests))
 
