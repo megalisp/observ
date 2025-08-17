@@ -26,7 +26,8 @@
 (with-handlers ([exn:fail?
                  (lambda (e)
                    (printf "Could not connect to OBS: ~a\n" (exn-message e))
-                   (printf "You can use (obs-connect #:ip \"<ip>\") in the REPL to try again.\n")
+                   (printf "\nNOTE: If you are connecting to OBS running locally, make \n sure OBS is running & its WebSocket server is enabled.\n")
+                   (printf "\nYou can also use (obs-connect #:ip \"<ip>\") in the REPL \n to remote in to different computer and try again.\n")
                    (set! main-conn #f)
                    (set! recv-thread #f))])
   (define-values (conn thread)
@@ -48,7 +49,7 @@
 (printf "║        !!! PRE-RELEASE !!! - USE AT YOUR OWN RISK! ║\n")
 (printf "╚════════════════════════════════════════════════════╝\n")
 (printf "\n")
-(printf "Submit ',enter repl.rkt' (if running locally) and then\n")
+(printf "Submit ',enter repl.rkt' (for the magic to happen) and then\n")
 (printf "tab-complete after typing `(obs!` to see available cmds.\n")
 (printf "\n")
 (printf "Type ',quit' or press Ctrl+C to exit.\n")
