@@ -21,11 +21,22 @@
 
 (define ip-arg (parse-args (current-command-line-arguments)))
 
-(define-values (main-conn recv-thread)
-  (if ip-arg
-      (obs-connect #:ip ip-arg #:auto-record? #t #:auto-scene "Scene 2")
-      (obs-connect #:auto-record? #t #:auto-scene "Scene 2")))
-(printf "Connection established!\n")
+(define main-conn #f)
+(define recv-thread #f)
+(with-handlers ([exn:fail?
+                 (lambda (e)
+                   (printf "Could not connect to OBS: ~a\n" (exn-message e))
+                   (printf "You can use (obs-connect #:ip \"<ip>\") in the REPL to try again.\n")
+                   (set! main-conn #f)
+                   (set! recv-thread #f))])
+  (define-values (conn thread)
+    (if ip-arg
+        (obs-connect #:ip ip-arg #:auto-record? #t #:auto-scene "Scene 2")
+        (obs-connect #:auto-record? #t #:auto-scene "Scene 2")))
+  (set! main-conn conn)
+  (set! recv-thread thread))
+(when main-conn
+  (printf "Connection established!\n"))
 (printf "\n")
 (printf "╔════════════════════════════════════════════════════╗\n")
 (printf "║  ██████  ██████  ███████ ███████ ██████  ██    ██  ║\n")
