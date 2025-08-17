@@ -18,13 +18,13 @@
          obs-disconnect
          pretty-print-json
          obs-password
-         OBS-WS-URL
+         DEFAULT-OBS-WS-URL
          current-connection
          current-recv-thread)
 
 
 
-(define OBS-WS-URL "ws://localhost:4455")
+(define DEFAULT-OBS-WS-URL "ws://localhost:4455")
 (define obs-password (getenv "OBS_WEBSOCKET_SERVER_PASSWORD"))
 
 ;; Connection state management
@@ -116,25 +116,26 @@
       
       ((create-recv-loop conn #:auto-record? auto-record? #:auto-scene auto-scene)))))
 
-(define (obs-connect #:auto-record? [auto-record? #f] #:auto-scene [auto-scene #f])
+(define (obs-connect #:ip [ip #f] #:auto-record? [auto-record? #f] #:auto-scene [auto-scene #f])
   (if current-connection
       (printf "Already connected to OBS! Use (obs-disconnect) first if you want to reconnect.\n")
-      (let* ([_ (printf "Attempting to connect to ~a...\n" OBS-WS-URL)]
-             [_ (printf "Password set: ~a\n" (if obs-password "Yes" "No"))]
-             [conn (ws-connect (string->url OBS-WS-URL))]
-             [_ (printf "Connected successfully!\n")]
-             [recv-thread (thread (create-recv-loop conn #:auto-record? auto-record? #:auto-scene auto-scene))]
-             [_ (printf "Connecting to OBS WebSocket...\n")]
-             [_ (sleep 2)])
-        
+      (let*
+          ([url (if ip
+                    (regexp-replace #rx"localhost" DEFAULT-OBS-WS-URL ip)
+                    DEFAULT-OBS-WS-URL)]
+           [_ (printf "Attempting to connect to ~a...\n" url)]
+           [_ (printf "Password set: ~a\n" (if obs-password "Yes" "No"))]
+           [conn (ws-connect (string->url url))]
+           [_ (printf "Connected successfully!\n")]
+           [recv-thread (thread (create-recv-loop conn #:auto-record? auto-record? #:auto-scene auto-scene))]
+           [_ (printf "Connecting to OBS WebSocket...\n")]
+           [_ (sleep 2)])
         ;; Set connection state
         (set! current-connection conn)
         (set! current-recv-thread recv-thread)
-        
         ;; Set up the convenience wrappers with current connection
         (current-conn conn)
         (current-print-results #t)
-        
         ;; Display connection established message
         (values conn recv-thread))))
 
